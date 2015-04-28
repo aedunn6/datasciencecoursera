@@ -1,0 +1,1046 @@
+
+R version 3.1.3 (2015-03-09) -- "Smooth Sidewalk"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.65 (6913) x86_64-apple-darwin13.4.0]
+
+[History restored from /Users/ashleyelizabeth/.Rapp.history]
+
+> # lapply always returns a list
+> # less typing is good because good programmers are always lazy
+> # debugging tools: traceback, debug, browser, trace, recover
+> library(datasets)
+> data(iris)
+> ?iris
+starting httpd help server ... done
+> head(iris)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa
+> head(iris$Sepal.Length)
+[1] 5.1 4.9 4.7 4.6 5.0 5.4
+> subset <- iris[which(iris[, "Species"] == virginica),]
+Error in which(iris[, "Species"] == virginica) : 
+  object 'virginica' not found
+> subset <- iris[which(iris[, "Species"] == "virginica"),]
+> head(subset)
+    Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+101          6.3         3.3          6.0         2.5 virginica
+102          5.8         2.7          5.1         1.9 virginica
+103          7.1         3.0          5.9         2.1 virginica
+104          6.3         2.9          5.6         1.8 virginica
+105          6.5         3.0          5.8         2.2 virginica
+106          7.6         3.0          6.6         2.1 virginica
+> virg_sepal_length <- subset$Sepal.Length
+> head(virg_sepal_length)
+[1] 6.3 5.8 7.1 6.3 6.5 7.6
+> mean(virg_sepal_length)
+[1] 6.588
+> colMeans(iris)
+Error in colMeans(iris) : 'x' must be numeric
+> apply(iris, 1, mean)
+  [1] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+ [25] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+ [49] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+ [73] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+ [97] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+[121] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+[145] NA NA NA NA NA NA
+There were 50 or more warnings (use warnings() to see the first 50)
+> apply(iris[, 1:4], 2, mean)
+Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+    5.843333     3.057333     3.758000     1.199333 
+> apply(iris[, 1:4], 1, mean)
+  [1] 2.550 2.375 2.350 2.350 2.550 2.850 2.425 2.525 2.225 2.400 2.700 2.500
+ [13] 2.325 2.125 2.800 3.000 2.750 2.575 2.875 2.675 2.675 2.675 2.350 2.650
+ [25] 2.575 2.450 2.600 2.600 2.550 2.425 2.425 2.675 2.725 2.825 2.425 2.400
+ [37] 2.625 2.500 2.225 2.550 2.525 2.100 2.275 2.675 2.800 2.375 2.675 2.350
+ [49] 2.675 2.475 4.075 3.900 4.100 3.275 3.850 3.575 3.975 2.900 3.850 3.300
+ [61] 2.875 3.650 3.300 3.775 3.350 3.900 3.650 3.400 3.600 3.275 3.925 3.550
+ [73] 3.800 3.700 3.725 3.850 3.950 4.100 3.725 3.200 3.200 3.150 3.400 3.850
+ [85] 3.600 3.875 4.000 3.575 3.500 3.325 3.425 3.775 3.400 2.900 3.450 3.525
+ [97] 3.525 3.675 2.925 3.475 4.525 3.875 4.525 4.150 4.375 4.825 3.400 4.575
+[109] 4.200 4.850 4.200 4.075 4.350 3.800 4.025 4.300 4.200 5.100 4.875 3.675
+[121] 4.525 3.825 4.800 3.925 4.450 4.550 3.900 3.950 4.225 4.400 4.550 5.025
+[133] 4.250 3.925 3.925 4.775 4.425 4.200 3.900 4.375 4.450 4.350 3.875 4.550
+[145] 4.550 4.300 3.925 4.175 4.325 3.950
+> library(datasets)
+> data(mtcars)
+> head(mtcars)
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+> tapply(mtcars$mpg, mtcars$cyl, mean)
+       4        6        8 
+26.66364 19.74286 15.10000 
+> split(mtcars, mtcars$cyl)
+$`4`
+                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Datsun 710     22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Merc 240D      24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230       22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona  21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+
+$`6`
+                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Merc 280       19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C      17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+
+$`8`
+                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+
+> apply(mtcars, 2, mean)
+       mpg        cyl       disp         hp       drat         wt       qsec 
+ 20.090625   6.187500 230.721875 146.687500   3.596563   3.217250  17.848750 
+        vs         am       gear       carb 
+  0.437500   0.406250   3.687500   2.812500 
+> sapply(mtcars, cyl, mean)
+Error in match.fun(FUN) : object 'cyl' not found
+> sapply(mtcars, 'cyl', mean)
+Error in get(as.character(FUN), mode = "function", envir = envir) : 
+  object 'cyl' of mode 'function' was not found
+> tapply(mtcars$hp, mtcars$cyl, mean)
+        4         6         8 
+ 82.63636 122.28571 209.21429 
+> 209.21429 - 82.63636
+[1] 126.5779
+> debug(ls)
+> ls
+function (name, pos = -1L, envir = as.environment(pos), all.names = FALSE, 
+    pattern) 
+{
+    if (!missing(name)) {
+        pos <- tryCatch(name, error = function(e) e)
+        if (inherits(pos, "error")) {
+            name <- substitute(name)
+            if (!is.character(name)) 
+                name <- deparse(name)
+            warning(gettextf("%s converted to character string", 
+                sQuote(name)), domain = NA)
+            pos <- name
+        }
+    }
+    all.names <- .Internal(ls(envir, all.names))
+    if (!missing(pattern)) {
+        if ((ll <- length(grep("[", pattern, fixed = TRUE))) && 
+            ll != length(grep("]", pattern, fixed = TRUE))) {
+            if (pattern == "[") {
+                pattern <- "\\["
+                warning("replaced regular expression pattern '[' by  '\\\\['")
+            }
+            else if (length(grep("[^\\\\]\\[<-", pattern))) {
+                pattern <- sub("\\[<-", "\\\\\\[<-", pattern)
+                warning("replaced '[<-' by '\\\\[<-' in regular expression pattern")
+            }
+        }
+        grep(pattern, all.names, value = TRUE)
+    }
+    else all.names
+}
+<bytecode: 0x7f8139038d08>
+<environment: namespace:base>
+> debug(ls)
+> ls()
+debugging in: ls()
+debug: {
+    if (!missing(name)) {
+        pos <- tryCatch(name, error = function(e) e)
+        if (inherits(pos, "error")) {
+            name <- substitute(name)
+            if (!is.character(name)) 
+                name <- deparse(name)
+            warning(gettextf("%s converted to character string", 
+                sQuote(name)), domain = NA)
+            pos <- name
+        }
+    }
+    all.names <- .Internal(ls(envir, all.names))
+    if (!missing(pattern)) {
+        if ((ll <- length(grep("[", pattern, fixed = TRUE))) && 
+            ll != length(grep("]", pattern, fixed = TRUE))) {
+            if (pattern == "[") {
+                pattern <- "\\["
+                warning("replaced regular expression pattern '[' by  '\\\\['")
+            }
+            else if (length(grep("[^\\\\]\\[<-", pattern))) {
+                pattern <- sub("\\[<-", "\\\\\\[<-", pattern)
+                warning("replaced '[<-' by '\\\\[<-' in regular expression pattern")
+            }
+        }
+        grep(pattern, all.names, value = TRUE)
+    }
+    else all.names
+}
+Browse[2]> n
+debug: if (!missing(name)) {
+    pos <- tryCatch(name, error = function(e) e)
+    if (inherits(pos, "error")) {
+        name <- substitute(name)
+        if (!is.character(name)) 
+            name <- deparse(name)
+        warning(gettextf("%s converted to character string", 
+            sQuote(name)), domain = NA)
+        pos <- name
+    }
+}
+Browse[2]> 
+Browse[2]> 
+Browse[2]> q
+function (save = "default", status = 0, runLast = TRUE) 
+.Internal(quit(save, status, runLast))
+<bytecode: 0x7f8138d85950>
+<environment: namespace:base>
+Browse[2]> quit
+function (save = "default", status = 0, runLast = TRUE) 
+.Internal(quit(save, status, runLast))
+<bytecode: 0x7f8138d87578>
+<environment: namespace:base>
+Browse[2]> 
+Browse[2]> 
+Browse[2]> Q
+> tapply(iris$Sepal.Length, iris$Species, mean)
+    setosa versicolor  virginica 
+     5.006      5.936      6.588 
+2015-04-21 11:35:11.027 R[39187:707] *** WARNING: Method convertPointFromBase: in class NSView is deprecated on 10.7 and later. It should not be used in new applications. 
+> solve(matrix())
+     [,1]
+[1,]   NA
+> matrix(c(3,4,5,6), 2, 2)
+     [,1] [,2]
+[1,]    3    5
+[2,]    4    6
+> solve(matrix(c(3,4,5,6), 2, 2))
+     [,1] [,2]
+[1,]   -3  2.5
+[2,]    2 -1.5
+> getwd()
+[1] "/Users/ashleyelizabeth"
+> setwd("/Users/ashleyelizabeth//Development/datasciencecoursera/r-programming/week3/pa2")
+> getwd()
+[1] "/Users/ashleyelizabeth/Development/datasciencecoursera/r-programming/week3/pa2"
+> source("cachematrix.R")
+> a <- solve(matrix(c(3,4,5,6), 2, 2))
+> b <- solve(solve(matrix(c(3,4,5,6), 2, 2)))
+> a
+     [,1] [,2]
+[1,]   -3  2.5
+[2,]    2 -1.5
+> b
+     [,1] [,2]
+[1,]    3    5
+[2,]    4    6
+> c <- matrix(c(1,0,1,0), 2, 2)
+> c
+     [,1] [,2]
+[1,]    1    1
+[2,]    0    0
+> d <- matrix(c(1,0), 2, 1)
+> d
+     [,1]
+[1,]    1
+[2,]    0
+> e <- matrix(c(1,0), 1, 2)
+> e
+     [,1] [,2]
+[1,]    1    0
+> cacheSolve(a)
+Error in x$get_inverse : $ operator is invalid for atomic vectors
+debugging in: ls(pos = i, pattern = what, all.names = TRUE)
+debug: {
+    if (!missing(name)) {
+        pos <- tryCatch(name, error = function(e) e)
+        if (inherits(pos, "error")) {
+            name <- substitute(name)
+            if (!is.character(name)) 
+                name <- deparse(name)
+            warning(gettextf("%s converted to character string", 
+                sQuote(name)), domain = NA)
+            pos <- name
+        }
+    }
+    all.names <- .Internal(ls(envir, all.names))
+    if (!missing(pattern)) {
+        if ((ll <- length(grep("[", pattern, fixed = TRUE))) && 
+            ll != length(grep("]", pattern, fixed = TRUE))) {
+            if (pattern == "[") {
+                pattern <- "\\["
+                warning("replaced regular expression pattern '[' by  '\\\\['")
+            }
+            else if (length(grep("[^\\\\]\\[<-", pattern))) {
+                pattern <- sub("\\[<-", "\\\\\\[<-", pattern)
+                warning("replaced '[<-' by '\\\\[<-' in regular expression pattern")
+            }
+        }
+        grep(pattern, all.names, value = TRUE)
+    }
+    else all.names
+}
+> makeCev
+Browse[2]> Q
+
+debugging in: ls(pos = i, pattern = what, all.names = TRUE)
+debug: {
+    if (!missing(name)) {
+        pos <- tryCatch(name, error = function(e) e)
+        if (inherits(pos, "error")) {
+            name <- substitute(name)
+            if (!is.character(name)) 
+                name <- deparse(name)
+            warning(gettextf("%s converted to character string", 
+                sQuote(name)), domain = NA)
+            pos <- name
+        }
+    }
+    all.names <- .Internal(ls(envir, all.names))
+    if (!missing(pattern)) {
+        if ((ll <- length(grep("[", pattern, fixed = TRUE))) && 
+            ll != length(grep("]", pattern, fixed = TRUE))) {
+            if (pattern == "[") {
+                pattern <- "\\["
+                warning("replaced regular expression pattern '[' by  '\\\\['")
+            }
+            else if (length(grep("[^\\\\]\\[<-", pattern))) {
+                pattern <- sub("\\[<-", "\\\\\\[<-", pattern)
+                warning("replaced '[<-' by '\\\\[<-' in regular expression pattern")
+            }
+        }
+        grep(pattern, all.names, value = TRUE)
+    }
+    else all.names
+}
+> makeV
+Browse[2]> Q
+
+> makeCacheMatrix(a)
+Error in makeCacheMatrix(a) : object 'set_inverse' not found
+> source("cachematrix.R")
+> makeCacheMatrix(a)
+$set
+function (y) 
+{
+    x <<- y
+    i <<- NULL
+}
+<environment: 0x7f813966c3c8>
+
+$get
+function () 
+x
+<environment: 0x7f813966c3c8>
+
+$store_inverse
+function (inverse) 
+i <<- inverse
+<environment: 0x7f813966c3c8>
+
+$get_inverse
+function () 
+i
+<environment: 0x7f813966c3c8>
+
+> av < -makeCacheMatrix(a)
+Error: object 'av' not found
+> av <- makeCacheMatrix(a)
+> bv <- makeCacheMatrix(b)
+> cv <- makeCacheMatrix(c)
+> dv <- makeCacheMatrix(d)
+> ev <- makeCacheMatrix(e)
+> cacheSolve(av)
+     [,1] [,2]
+[1,]    3    5
+[2,]    4    6
+> a
+     [,1] [,2]
+[1,]   -3  2.5
+[2,]    2 -1.5
+> cacheSolve(bv)
+     [,1] [,2]
+[1,]   -3  2.5
+[2,]    2 -1.5
+> b
+     [,1] [,2]
+[1,]    3    5
+[2,]    4    6
+> cacheSolve(cv)
+Error in solve.default(data, ...) : 
+  Lapack routine dgesv: system is exactly singular: U[2,2] = 0
+> c
+     [,1] [,2]
+[1,]    1    1
+[2,]    0    0
+> cacheSolve(dv)
+Error in solve.default(data, ...) : 'a' (2 x 1) must be square
+> d
+     [,1]
+[1,]    1
+[2,]    0
+> cacheSolve(ev)
+Error in solve.default(data, ...) : 'a' (1 x 2) must be square
+> e
+     [,1] [,2]
+[1,]    1    0
+> c(1:10)
+ [1]  1  2  3  4  5  6  7  8  9 10
+> f <- matrix(c(1:10000), 100, 100)
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+Error in solve.default(data, ...) : 
+  Lapack routine dgesv: system is exactly singular: U[13,13] = 0
+> f <- matrix(c(1:9999, 5235), 100, 100)
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+Error in solve.default(data, ...) : 
+  Lapack routine dgesv: system is exactly singular: U[13,13] = 0
+> f <- matrix(c(1:5000, 1:5000), 100, 100)
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+Error in solve.default(data, ...) : 
+  Lapack routine dgesv: system is exactly singular: U[13,13] = 0
+> f <- matrix(c(5:10005), 100, 100)
+Warning message:
+In matrix(c(5:10005), 100, 100) :
+  data length [10001] is not a sub-multiple or multiple of the number of rows [100]
+> f <- matrix(c(5:10004), 100, 100)
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+Error in solve.default(data, ...) : 
+  Lapack routine dgesv: system is exactly singular: U[49,49] = 0
+> f <- matrix(c(100:10100), 100, 100)
+Warning message:
+In matrix(c(100:10100), 100, 100) :
+  data length [10001] is not a sub-multiple or multiple of the number of rows [100]
+> f <- matrix(c(100:10099), 100, 100)
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+Error in solve.default(data, ...) : 
+  system is computationally singular: reciprocal condition number = 1.36168e-34
+> f <- matrix(rexp(200), 10))
+Error: unexpected ')' in "f <- matrix(rexp(200), 10))"
+> f <- matrix(rexp(200), 10)
+> f
+           [,1]      [,2]       [,3]      [,4]       [,5]      [,6]       [,7]
+ [1,] 0.1382475 0.9084681 1.61190135 0.2563973 1.84728291 1.0533140 0.01139839
+ [2,] 0.2438993 1.0981615 0.37721212 3.3464097 5.07060342 3.1800759 0.22588143
+ [3,] 0.7418658 0.8443492 0.03935772 0.3522455 0.12903319 0.7414756 0.34674238
+ [4,] 0.3182140 0.1981173 0.19864090 0.9489141 1.85076348 0.3348128 0.23482177
+ [5,] 1.0029445 1.5187286 0.02887322 0.5617561 0.50228786 0.7668159 1.00911150
+ [6,] 1.8557662 0.2313837 2.35619264 0.1438185 0.13807889 0.2325857 1.96440296
+ [7,] 0.0750878 0.5709386 0.07466127 0.7620437 0.74957846 0.3385898 0.06091394
+ [8,] 0.6135725 0.3718023 1.18234661 1.0314755 0.77247828 1.2975249 0.52771191
+ [9,] 0.8050927 0.5805641 1.85050765 0.2990646 0.07808724 1.8699679 0.97912948
+[10,] 0.2320029 0.1600750 1.28128456 0.4605602 0.26486015 0.4284757 2.14606620
+            [,8]       [,9]      [,10]      [,11]      [,12]      [,13]
+ [1,] 2.59207177 1.82202897 0.39148262 1.10507051 1.55417145 0.44129162
+ [2,] 0.02115982 0.41142210 2.11637946 0.31576096 1.95038523 0.06699315
+ [3,] 0.09910527 1.15593411 1.87228821 0.82705513 0.03990778 2.05528045
+ [4,] 0.08494012 2.32457182 0.72014684 0.38332309 0.76077850 1.81042077
+ [5,] 0.07069400 0.24087287 0.83084700 0.55234816 0.91255936 0.32527455
+ [6,] 1.31126954 1.03720041 0.03546469 0.51269356 0.28391570 0.86186868
+ [7,] 0.50001397 0.02226819 0.67049191 2.40622795 0.14416246 0.69263583
+ [8,] 0.79297269 0.87780658 0.98657643 2.22273649 1.40024483 0.06787939
+ [9,] 2.15197256 0.03642833 1.40535294 3.14952053 1.86991454 0.54530875
+[10,] 0.77688275 0.80375311 1.04295528 0.06256978 0.54123564 1.62132480
+           [,14]     [,15]       [,16]      [,17]     [,18]      [,19]
+ [1,] 0.26211485 1.8741061 2.952686892 1.21590370 3.2925658 2.17831198
+ [2,] 1.53995302 0.7904752 0.650572839 4.07522065 0.7564629 2.06630233
+ [3,] 0.04358048 1.3975708 0.133807252 0.48552504 1.4365526 0.11224846
+ [4,] 0.16019524 0.5036937 0.613187871 0.02111549 2.4504592 0.58643042
+ [5,] 0.16278231 1.3283648 0.364306946 2.43422019 0.5937757 0.30799174
+ [6,] 0.09371960 0.3388519 0.428093495 0.27565664 1.0294420 3.17265584
+ [7,] 0.58114582 1.2892510 0.001932513 0.06397978 1.2980461 0.16444654
+ [8,] 2.29563865 5.9271161 0.281574947 0.29417812 3.1057690 0.61514723
+ [9,] 0.34235680 1.6251587 1.359697309 0.37667794 0.3652453 2.84392096
+[10,] 0.80137013 0.7970826 0.903643896 0.36137807 0.7558237 0.02982951
+          [,20]
+ [1,] 1.0439286
+ [2,] 1.6589324
+ [3,] 0.3890278
+ [4,] 1.8269769
+ [5,] 0.7407421
+ [6,] 0.5727861
+ [7,] 1.1297803
+ [8,] 1.8070610
+ [9,] 3.8864157
+[10,] 0.6435313
+> f <- matrix(rexp(200), 10, 10)
+> f
+              [,1]       [,2]      [,3]      [,4]        [,5]       [,6]
+ [1,] 0.0008721203 0.36435661 0.3806810 1.2406330 2.514341265 1.28464134
+ [2,] 0.9487064220 2.55541320 0.1355034 0.1274371 1.080448259 0.09911542
+ [3,] 0.1320623313 0.11046830 0.4669052 0.5381316 1.253398711 0.83285622
+ [4,] 1.0567324645 0.56766942 0.8894742 0.1414707 0.836975686 0.40614118
+ [5,] 1.7116667423 1.60921122 0.3844440 0.6741774 0.008951205 0.46456113
+ [6,] 0.1991483485 0.04766232 1.1784296 3.3218976 1.418653678 1.09845250
+ [7,] 0.7699525887 0.49307199 0.9380473 0.9344813 0.339695676 0.63530697
+ [8,] 0.3513061493 1.70176303 0.1504408 2.9824347 0.221325757 0.12918367
+ [9,] 0.7853745892 0.63648477 0.1451580 1.6038976 0.559993234 1.25771814
+[10,] 0.3393054930 0.74257603 0.0753838 0.8163133 1.948460554 1.63726813
+           [,7]      [,8]       [,9]      [,10]
+ [1,] 3.4837128 3.1702378 0.39431812 0.49281657
+ [2,] 0.1582077 0.4444170 0.68404515 0.12218983
+ [3,] 0.4655865 0.4688765 1.18405713 0.93716485
+ [4,] 1.5826787 0.7052351 0.92434706 1.15305970
+ [5,] 0.8655763 0.0357891 0.45568889 0.06525908
+ [6,] 0.1946177 0.6710846 0.03427576 0.04513656
+ [7,] 0.0875786 0.5527890 0.87399288 3.94331407
+ [8,] 1.0984388 0.6490977 1.14294886 0.38830464
+ [9,] 6.6607690 1.7003312 0.54417816 0.01490901
+[10,] 1.9282582 3.3800393 0.54977087 4.68100675
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+            [,1]        [,2]        [,3]       [,4]       [,5]       [,6]
+ [1,] -3.9125642 -0.15096079 -0.60093616  4.6971843 -1.1833711  1.5619901
+ [2,]  2.4092326  0.36047127  0.19401927 -2.9967309  1.0037244 -0.9695002
+ [3,]  5.5530621 -0.25756645  0.29191576 -5.3639655  2.2775122 -1.9859462
+ [4,] -1.6596081  0.01534678 -0.28983015  1.7237435 -0.7763791  0.8005203
+ [5,] -4.8623664  0.82136310 -0.51808422  5.3148865 -2.7362763  2.1859537
+ [6,]  4.2269845 -0.41597026  1.31086560 -5.6412882  2.7041482 -1.6851228
+ [7,] -0.7521678  0.21683022 -0.16687607  0.7783346 -0.5824103  0.2965547
+ [8,]  3.0678085 -0.71394517  0.06180311 -2.5644001  1.6702376 -1.3234385
+ [9,]  1.1322871 -0.49399519  0.77651380 -0.9051297  0.7132735 -0.8143177
+[10,] -1.3914423  0.24305382 -0.25130916  1.3188986 -0.8314864  0.5415609
+            [,7]         [,8]       [,9]      [,10]
+ [1,] -4.3727783  0.490304922  0.1854814  3.0229550
+ [2,]  2.7442657 -0.348929393 -0.1149791 -1.8508439
+ [3,]  5.9093058 -0.765074963 -0.6060266 -4.2403038
+ [4,] -1.6913969  0.391241962  0.1653615  1.2027119
+ [5,] -4.9712794  0.298582842  0.6021911  3.4632162
+ [6,]  4.4768360 -0.859269273 -0.2949780 -3.0275495
+ [7,] -0.5978807 -0.001180214  0.3176606  0.4232180
+ [8,]  2.4797831  0.040601158 -0.6832740 -1.7857373
+ [9,]  0.8777433  0.315692090 -0.3189960 -0.8054977
+[10,] -1.0625422  0.074258155  0.2382163  0.9737532
+> f <- matrix(rexp(200), 100, 100)
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+Error in solve.default(data, ...) : 
+  Lapack routine dgesv: system is exactly singular: U[6,6] = 0
+> f <- matrix(rexp(200), 100, 100)
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+Error in solve.default(data, ...) : 
+  Lapack routine dgesv: system is exactly singular: U[5,5] = 0
+> f <- matrix(rexp(1000), 100, 100)
+> fv <- makeCacheMatrix(f)
+> cacheSolve(fv)
+Error in solve.default(data, ...) : 
+  Lapack routine dgesv: system is exactly singular: U[23,23] = 0
+> makeCacheMatrix(f)
+$set
+function (y) 
+{
+    x <<- y
+    i <<- NULL
+}
+<environment: 0x7f8138c98110>
+
+$get
+function () 
+x
+<environment: 0x7f8138c98110>
+
+$store_inverse
+function (inverse) 
+i <<- inverse
+<environment: 0x7f8138c98110>
+
+$get_inverse
+function () 
+i
+<environment: 0x7f8138c98110>
+
+> #Leaving an index blank indicates that you want to keep all the elements in that dimension
+> # [,3] means, keep all rows, keep only 3rd column
+> # [1,] means, keep 1st row, keep all columns
+debugging in: FUN(1:10[[1L]], ...)
+debug: {
+    if (!missing(name)) {
+        pos <- tryCatch(name, error = function(e) e)
+        if (inherits(pos, "error")) {
+            name <- substitute(name)
+            if (!is.character(name)) 
+                name <- deparse(name)
+            warning(gettextf("%s converted to character string", 
+                sQuote(name)), domain = NA)
+            pos <- name
+        }
+    }
+    all.names <- .Internal(ls(envir, all.names))
+    if (!missing(pattern)) {
+        if ((ll <- length(grep("[", pattern, fixed = TRUE))) && 
+            ll != length(grep("]", pattern, fixed = TRUE))) {
+            if (pattern == "[") {
+                pattern <- "\\["
+                warning("replaced regular expression pattern '[' by  '\\\\['")
+            }
+            else if (length(grep("[^\\\\]\\[<-", pattern))) {
+                pattern <- sub("\\[<-", "\\\\\\[<-", pattern)
+                warning("replaced '[<-' by '\\\\[<-' in regular expression pattern")
+            }
+        }
+        grep(pattern, all.names, value = TRUE)
+    }
+    else all.names
+}
+> head(iri
+Browse[2]> Q
+
+> head(iris)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa
+> head(iris[,3])
+[1] 1.4 1.4 1.3 1.5 1.4 1.7
+> head(iris[2,])
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+2          4.9           3          1.4         0.2  setosa
+> head(iris[c(1,2,3,4,5),])
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+> head(iris[,c(1,2,3,4,5])
+Error: unexpected ']' in "head(iris[,c(1,2,3,4,5]"
+> head(iris[,c(1,2,3,4,5)])
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa
+> head(iris[,c(1,3,5)])
+  Sepal.Length Petal.Length Species
+1          5.1          1.4  setosa
+2          4.9          1.4  setosa
+3          4.7          1.3  setosa
+4          4.6          1.5  setosa
+5          5.0          1.4  setosa
+6          5.4          1.7  setosa
+> head(iris[25:35,])
+   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+25          4.8         3.4          1.9         0.2  setosa
+26          5.0         3.0          1.6         0.2  setosa
+27          5.0         3.4          1.6         0.4  setosa
+28          5.2         3.5          1.5         0.2  setosa
+29          5.2         3.4          1.4         0.2  setosa
+30          4.7         3.2          1.6         0.2  setosa
+> head(iris[20:35,])
+   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+20          5.1         3.8          1.5         0.3  setosa
+21          5.4         3.4          1.7         0.2  setosa
+22          5.1         3.7          1.5         0.4  setosa
+23          4.6         3.6          1.0         0.2  setosa
+24          5.1         3.3          1.7         0.5  setosa
+25          4.8         3.4          1.9         0.2  setosa
+> iris[25:35,]
+   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+25          4.8         3.4          1.9         0.2  setosa
+26          5.0         3.0          1.6         0.2  setosa
+27          5.0         3.4          1.6         0.4  setosa
+28          5.2         3.5          1.5         0.2  setosa
+29          5.2         3.4          1.4         0.2  setosa
+30          4.7         3.2          1.6         0.2  setosa
+31          4.8         3.1          1.6         0.2  setosa
+32          5.4         3.4          1.5         0.4  setosa
+33          5.2         4.1          1.5         0.1  setosa
+34          5.5         4.2          1.4         0.2  setosa
+35          4.9         3.1          1.5         0.2  setosa
+> iris[20:35,]
+   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+20          5.1         3.8          1.5         0.3  setosa
+21          5.4         3.4          1.7         0.2  setosa
+22          5.1         3.7          1.5         0.4  setosa
+23          4.6         3.6          1.0         0.2  setosa
+24          5.1         3.3          1.7         0.5  setosa
+25          4.8         3.4          1.9         0.2  setosa
+26          5.0         3.0          1.6         0.2  setosa
+27          5.0         3.4          1.6         0.4  setosa
+28          5.2         3.5          1.5         0.2  setosa
+29          5.2         3.4          1.4         0.2  setosa
+30          4.7         3.2          1.6         0.2  setosa
+31          4.8         3.1          1.6         0.2  setosa
+32          5.4         3.4          1.5         0.4  setosa
+33          5.2         4.1          1.5         0.1  setosa
+34          5.5         4.2          1.4         0.2  setosa
+35          4.9         3.1          1.5         0.2  setosa
+> iris[,iris$Species == "virginica"]
+Error in `[.data.frame`(iris, , iris$Species == "virginica") : 
+  undefined columns selected
+> iris[iris$Species == "virginica",]
+    Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+101          6.3         3.3          6.0         2.5 virginica
+102          5.8         2.7          5.1         1.9 virginica
+103          7.1         3.0          5.9         2.1 virginica
+104          6.3         2.9          5.6         1.8 virginica
+105          6.5         3.0          5.8         2.2 virginica
+106          7.6         3.0          6.6         2.1 virginica
+107          4.9         2.5          4.5         1.7 virginica
+108          7.3         2.9          6.3         1.8 virginica
+109          6.7         2.5          5.8         1.8 virginica
+110          7.2         3.6          6.1         2.5 virginica
+111          6.5         3.2          5.1         2.0 virginica
+112          6.4         2.7          5.3         1.9 virginica
+113          6.8         3.0          5.5         2.1 virginica
+114          5.7         2.5          5.0         2.0 virginica
+115          5.8         2.8          5.1         2.4 virginica
+116          6.4         3.2          5.3         2.3 virginica
+117          6.5         3.0          5.5         1.8 virginica
+118          7.7         3.8          6.7         2.2 virginica
+119          7.7         2.6          6.9         2.3 virginica
+120          6.0         2.2          5.0         1.5 virginica
+121          6.9         3.2          5.7         2.3 virginica
+122          5.6         2.8          4.9         2.0 virginica
+123          7.7         2.8          6.7         2.0 virginica
+124          6.3         2.7          4.9         1.8 virginica
+125          6.7         3.3          5.7         2.1 virginica
+126          7.2         3.2          6.0         1.8 virginica
+127          6.2         2.8          4.8         1.8 virginica
+128          6.1         3.0          4.9         1.8 virginica
+129          6.4         2.8          5.6         2.1 virginica
+130          7.2         3.0          5.8         1.6 virginica
+131          7.4         2.8          6.1         1.9 virginica
+132          7.9         3.8          6.4         2.0 virginica
+133          6.4         2.8          5.6         2.2 virginica
+134          6.3         2.8          5.1         1.5 virginica
+135          6.1         2.6          5.6         1.4 virginica
+136          7.7         3.0          6.1         2.3 virginica
+137          6.3         3.4          5.6         2.4 virginica
+138          6.4         3.1          5.5         1.8 virginica
+139          6.0         3.0          4.8         1.8 virginica
+140          6.9         3.1          5.4         2.1 virginica
+141          6.7         3.1          5.6         2.4 virginica
+142          6.9         3.1          5.1         2.3 virginica
+143          5.8         2.7          5.1         1.9 virginica
+144          6.8         3.2          5.9         2.3 virginica
+145          6.7         3.3          5.7         2.5 virginica
+146          6.7         3.0          5.2         2.3 virginica
+147          6.3         2.5          5.0         1.9 virginica
+148          6.5         3.0          5.2         2.0 virginica
+149          6.2         3.4          5.4         2.3 virginica
+150          5.9         3.0          5.1         1.8 virginica
+> iris[iris$Species == "virginica" & iris$Sepal.Length > 7,]
+    Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+103          7.1         3.0          5.9         2.1 virginica
+106          7.6         3.0          6.6         2.1 virginica
+108          7.3         2.9          6.3         1.8 virginica
+110          7.2         3.6          6.1         2.5 virginica
+118          7.7         3.8          6.7         2.2 virginica
+119          7.7         2.6          6.9         2.3 virginica
+123          7.7         2.8          6.7         2.0 virginica
+126          7.2         3.2          6.0         1.8 virginica
+130          7.2         3.0          5.8         1.6 virginica
+131          7.4         2.8          6.1         1.9 virginica
+132          7.9         3.8          6.4         2.0 virginica
+136          7.7         3.0          6.1         2.3 virginica
+> iris[iris$Species == "virginica" && iris$Sepal.Length > 7,]
+[1] Sepal.Length Sepal.Width  Petal.Length Petal.Width  Species     
+<0 rows> (or 0-length row.names)
+> iris[iris$Species == "virginica" & iris$Sepal.Length > 7 & iris$Petal.Length > 6,]
+    Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+106          7.6         3.0          6.6         2.1 virginica
+108          7.3         2.9          6.3         1.8 virginica
+110          7.2         3.6          6.1         2.5 virginica
+118          7.7         3.8          6.7         2.2 virginica
+119          7.7         2.6          6.9         2.3 virginica
+123          7.7         2.8          6.7         2.0 virginica
+131          7.4         2.8          6.1         1.9 virginica
+132          7.9         3.8          6.4         2.0 virginica
+136          7.7         3.0          6.1         2.3 virginica
+> iris[iris$Species == "virginica" & iris$Sepal.Length > 7 & iris$Petal.Length > 6,4]
+[1] 2.1 1.8 2.5 2.2 2.3 2.0 1.9 2.0 2.3
+> iris[iris$Species %in% c("virginica","setosa") & iris$Sepal.Length > 7,]
+    Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+103          7.1         3.0          5.9         2.1 virginica
+106          7.6         3.0          6.6         2.1 virginica
+108          7.3         2.9          6.3         1.8 virginica
+110          7.2         3.6          6.1         2.5 virginica
+118          7.7         3.8          6.7         2.2 virginica
+119          7.7         2.6          6.9         2.3 virginica
+123          7.7         2.8          6.7         2.0 virginica
+126          7.2         3.2          6.0         1.8 virginica
+130          7.2         3.0          5.8         1.6 virginica
+131          7.4         2.8          6.1         1.9 virginica
+132          7.9         3.8          6.4         2.0 virginica
+136          7.7         3.0          6.1         2.3 virginica
+> iris[iris$Species %in% c("virginica","setosa"),]
+    Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+1            5.1         3.5          1.4         0.2    setosa
+2            4.9         3.0          1.4         0.2    setosa
+3            4.7         3.2          1.3         0.2    setosa
+4            4.6         3.1          1.5         0.2    setosa
+5            5.0         3.6          1.4         0.2    setosa
+6            5.4         3.9          1.7         0.4    setosa
+7            4.6         3.4          1.4         0.3    setosa
+8            5.0         3.4          1.5         0.2    setosa
+9            4.4         2.9          1.4         0.2    setosa
+10           4.9         3.1          1.5         0.1    setosa
+11           5.4         3.7          1.5         0.2    setosa
+12           4.8         3.4          1.6         0.2    setosa
+13           4.8         3.0          1.4         0.1    setosa
+14           4.3         3.0          1.1         0.1    setosa
+15           5.8         4.0          1.2         0.2    setosa
+16           5.7         4.4          1.5         0.4    setosa
+17           5.4         3.9          1.3         0.4    setosa
+18           5.1         3.5          1.4         0.3    setosa
+19           5.7         3.8          1.7         0.3    setosa
+20           5.1         3.8          1.5         0.3    setosa
+21           5.4         3.4          1.7         0.2    setosa
+22           5.1         3.7          1.5         0.4    setosa
+23           4.6         3.6          1.0         0.2    setosa
+24           5.1         3.3          1.7         0.5    setosa
+25           4.8         3.4          1.9         0.2    setosa
+26           5.0         3.0          1.6         0.2    setosa
+27           5.0         3.4          1.6         0.4    setosa
+28           5.2         3.5          1.5         0.2    setosa
+29           5.2         3.4          1.4         0.2    setosa
+30           4.7         3.2          1.6         0.2    setosa
+31           4.8         3.1          1.6         0.2    setosa
+32           5.4         3.4          1.5         0.4    setosa
+33           5.2         4.1          1.5         0.1    setosa
+34           5.5         4.2          1.4         0.2    setosa
+35           4.9         3.1          1.5         0.2    setosa
+36           5.0         3.2          1.2         0.2    setosa
+37           5.5         3.5          1.3         0.2    setosa
+38           4.9         3.6          1.4         0.1    setosa
+39           4.4         3.0          1.3         0.2    setosa
+40           5.1         3.4          1.5         0.2    setosa
+41           5.0         3.5          1.3         0.3    setosa
+42           4.5         2.3          1.3         0.3    setosa
+43           4.4         3.2          1.3         0.2    setosa
+44           5.0         3.5          1.6         0.6    setosa
+45           5.1         3.8          1.9         0.4    setosa
+46           4.8         3.0          1.4         0.3    setosa
+47           5.1         3.8          1.6         0.2    setosa
+48           4.6         3.2          1.4         0.2    setosa
+49           5.3         3.7          1.5         0.2    setosa
+50           5.0         3.3          1.4         0.2    setosa
+101          6.3         3.3          6.0         2.5 virginica
+102          5.8         2.7          5.1         1.9 virginica
+103          7.1         3.0          5.9         2.1 virginica
+104          6.3         2.9          5.6         1.8 virginica
+105          6.5         3.0          5.8         2.2 virginica
+106          7.6         3.0          6.6         2.1 virginica
+107          4.9         2.5          4.5         1.7 virginica
+108          7.3         2.9          6.3         1.8 virginica
+109          6.7         2.5          5.8         1.8 virginica
+110          7.2         3.6          6.1         2.5 virginica
+111          6.5         3.2          5.1         2.0 virginica
+112          6.4         2.7          5.3         1.9 virginica
+113          6.8         3.0          5.5         2.1 virginica
+114          5.7         2.5          5.0         2.0 virginica
+115          5.8         2.8          5.1         2.4 virginica
+116          6.4         3.2          5.3         2.3 virginica
+117          6.5         3.0          5.5         1.8 virginica
+118          7.7         3.8          6.7         2.2 virginica
+119          7.7         2.6          6.9         2.3 virginica
+120          6.0         2.2          5.0         1.5 virginica
+121          6.9         3.2          5.7         2.3 virginica
+122          5.6         2.8          4.9         2.0 virginica
+123          7.7         2.8          6.7         2.0 virginica
+124          6.3         2.7          4.9         1.8 virginica
+125          6.7         3.3          5.7         2.1 virginica
+126          7.2         3.2          6.0         1.8 virginica
+127          6.2         2.8          4.8         1.8 virginica
+128          6.1         3.0          4.9         1.8 virginica
+129          6.4         2.8          5.6         2.1 virginica
+130          7.2         3.0          5.8         1.6 virginica
+131          7.4         2.8          6.1         1.9 virginica
+132          7.9         3.8          6.4         2.0 virginica
+133          6.4         2.8          5.6         2.2 virginica
+134          6.3         2.8          5.1         1.5 virginica
+135          6.1         2.6          5.6         1.4 virginica
+136          7.7         3.0          6.1         2.3 virginica
+137          6.3         3.4          5.6         2.4 virginica
+138          6.4         3.1          5.5         1.8 virginica
+139          6.0         3.0          4.8         1.8 virginica
+140          6.9         3.1          5.4         2.1 virginica
+141          6.7         3.1          5.6         2.4 virginica
+142          6.9         3.1          5.1         2.3 virginica
+143          5.8         2.7          5.1         1.9 virginica
+144          6.8         3.2          5.9         2.3 virginica
+145          6.7         3.3          5.7         2.5 virginica
+146          6.7         3.0          5.2         2.3 virginica
+147          6.3         2.5          5.0         1.9 virginica
+148          6.5         3.0          5.2         2.0 virginica
+149          6.2         3.4          5.4         2.3 virginica
+150          5.9         3.0          5.1         1.8 virginica
+> mean(iris[iris$Species == "virginica",])
+[1] NA
+Warning message:
+In mean.default(iris[iris$Species == "virginica", ]) :
+  argument is not numeric or logical: returning NA
+> mean(iris[iris$Species == "virginica",1])
+[1] 6.588
+> mean(iris[iris$Species == "setosa",1])
+[1] 5.006
+> max(iris[iris$Species == "setosa",1])
+[1] 5.8
+> max(iris[iris$Species == "virginica",1])
+[1] 7.9
+> min(iris[iris$Species == "setosa",1])
+[1] 4.3
+> min(iris[iris$Species == "virginica",1])
+[1] 4.9
+> iris[with(Species == "virginica" & Sepal.Length > 7 & Petal.Length > 6),4]
+Error in with(Species == "virginica" & Sepal.Length > 7 & Petal.Length >  : 
+  object 'Species' not found
+> iris[with(iris, Species == "virginica" & Sepal.Length > 7 & Petal.Length > 6),4]
+[1] 2.1 1.8 2.5 2.2 2.3 2.0 1.9 2.0 2.3
+> subset(iris, Species == "virginica")
+    Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+101          6.3         3.3          6.0         2.5 virginica
+102          5.8         2.7          5.1         1.9 virginica
+103          7.1         3.0          5.9         2.1 virginica
+104          6.3         2.9          5.6         1.8 virginica
+105          6.5         3.0          5.8         2.2 virginica
+106          7.6         3.0          6.6         2.1 virginica
+107          4.9         2.5          4.5         1.7 virginica
+108          7.3         2.9          6.3         1.8 virginica
+109          6.7         2.5          5.8         1.8 virginica
+110          7.2         3.6          6.1         2.5 virginica
+111          6.5         3.2          5.1         2.0 virginica
+112          6.4         2.7          5.3         1.9 virginica
+113          6.8         3.0          5.5         2.1 virginica
+114          5.7         2.5          5.0         2.0 virginica
+115          5.8         2.8          5.1         2.4 virginica
+116          6.4         3.2          5.3         2.3 virginica
+117          6.5         3.0          5.5         1.8 virginica
+118          7.7         3.8          6.7         2.2 virginica
+119          7.7         2.6          6.9         2.3 virginica
+120          6.0         2.2          5.0         1.5 virginica
+121          6.9         3.2          5.7         2.3 virginica
+122          5.6         2.8          4.9         2.0 virginica
+123          7.7         2.8          6.7         2.0 virginica
+124          6.3         2.7          4.9         1.8 virginica
+125          6.7         3.3          5.7         2.1 virginica
+126          7.2         3.2          6.0         1.8 virginica
+127          6.2         2.8          4.8         1.8 virginica
+128          6.1         3.0          4.9         1.8 virginica
+129          6.4         2.8          5.6         2.1 virginica
+130          7.2         3.0          5.8         1.6 virginica
+131          7.4         2.8          6.1         1.9 virginica
+132          7.9         3.8          6.4         2.0 virginica
+133          6.4         2.8          5.6         2.2 virginica
+134          6.3         2.8          5.1         1.5 virginica
+135          6.1         2.6          5.6         1.4 virginica
+136          7.7         3.0          6.1         2.3 virginica
+137          6.3         3.4          5.6         2.4 virginica
+138          6.4         3.1          5.5         1.8 virginica
+139          6.0         3.0          4.8         1.8 virginica
+140          6.9         3.1          5.4         2.1 virginica
+141          6.7         3.1          5.6         2.4 virginica
+142          6.9         3.1          5.1         2.3 virginica
+143          5.8         2.7          5.1         1.9 virginica
+144          6.8         3.2          5.9         2.3 virginica
+145          6.7         3.3          5.7         2.5 virginica
+146          6.7         3.0          5.2         2.3 virginica
+147          6.3         2.5          5.0         1.9 virginica
+148          6.5         3.0          5.2         2.0 virginica
+149          6.2         3.4          5.4         2.3 virginica
+150          5.9         3.0          5.1         1.8 virginica
+> #subset(iris, Species == "virginica") == iris[iris$Species == "virginica",]
+> iris[which(Species == "virginica" & Sepal.Length > 7 & Petal.Length > 6),4]
+Error in which(Species == "virginica" & Sepal.Length > 7 & Petal.Length >  : 
+  object 'Species' not found
+> iris[which(iris, Species == "virginica" & Sepal.Length > 7 & Petal.Length > 6),4]
+Error in which(iris, Species == "virginica" & Sepal.Length > 7 & Petal.Length >  : 
+  argument to 'which' is not logical
+> ?which
+debugging in: ls(.Internal(getNamespaceRegistry()), all.names = TRUE)
+debug: {
+    if (!missing(name)) {
+        pos <- tryCatch(name, error = function(e) e)
+        if (inherits(pos, "error")) {
+            name <- substitute(name)
+            if (!is.character(name)) 
+                name <- deparse(name)
+            warning(gettextf("%s converted to character string", 
+                sQuote(name)), domain = NA)
+            pos <- name
+        }
+    }
+    all.names <- .Internal(ls(envir, all.names))
+    if (!missing(pattern)) {
+        if ((ll <- length(grep("[", pattern, fixed = TRUE))) && 
+            ll != length(grep("]", pattern, fixed = TRUE))) {
+            if (pattern == "[") {
+                pattern <- "\\["
+                warning("replaced regular expression pattern '[' by  '\\\\['")
+            }
+            else if (length(grep("[^\\\\]\\[<-", pattern))) {
+                pattern <- sub("\\[<-", "\\\\\\[<-", pattern)
+                warning("replaced '[<-' by '\\\\[<-' in regular expression pattern")
+            }
+        }
+        grep(pattern, all.names, value = TRUE)
+    }
+    else all.names
+}
+Browse[2]> Q
+> 
+> iris[which(iris$Species == "virginica" & iris$Sepal.Length > 7 & iris$Petal.Length > 6),4]
+[1] 2.1 1.8 2.5 2.2 2.3 2.0 1.9 2.0 2.3
+> iris[with(iris, Species == "virginica" & Sepal.Length > 7 & Petal.Length > 6),4]
+[1] 2.1 1.8 2.5 2.2 2.3 2.0 1.9 2.0 2.3
+> iris[iris$Species == "virginica" & iris$Sepal.Length > 7 & iris$Petal.Length > 6,4]
+[1] 2.1 1.8 2.5 2.2 2.3 2.0 1.9 2.0 2.3
+> #with() function evaluates an R expression in an environment constructed from data, possibly modifying the original data.
+> #which() function gives the TRUE indices of a logical object, allowing for array indices.
+> #further reference: http://adv-r.had.co.nz/Subsetting.html
+> 

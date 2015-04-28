@@ -1,0 +1,726 @@
+
+R version 3.1.3 (2015-03-09) -- "Smooth Sidewalk"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.65 (6913) x86_64-apple-darwin13.4.0]
+
+[History restored from /Users/ashleyelizabeth/.Rapp.history]
+
+> #negative numbers omit that index
+> c(1,2,3,4)
+[1] 1 2 3 4
+> v <- c(1,2,3,4)
+> v[-1]
+[1] 2 3 4
+> a <- matrix(1:9, nrow = 3)
+> colnames(a) <- c("A", "B", "C")
+> a
+     A B C
+[1,] 1 4 7
+[2,] 2 5 8
+[3,] 3 6 9
+> # [ subsetting automatically simplifies results to the lowest dimensionality
+> df <- data.frame(x = 1:3, y = 3:1, z = letters[1:3])
+> df
+  x y z
+1 1 3 a
+2 2 2 b
+3 3 1 c
+> #R checks user-defined functions first, then loaded packages
+> #R is lexically scoped (closures!)
+> #free variables (in functions) are not formal arguments or local variables
+> df['x']
+  x
+1 1
+2 2
+3 3
+> df[1]
+  x
+1 1
+2 2
+3 3
+> df[,1]
+[1] 1 2 3
+> df[,c(1)]
+[1] 1 2 3
+> df[[,c(1)]]
+Error in `[[.data.frame`(df, , c(1)) : 
+  argument "..1" is missing, with no default
+> df[[,1]]
+Error in `[[.data.frame`(df, , 1) : 
+  argument "..1" is missing, with no default
+> mtcars[mtcars$cyl = 4, ]
+Error: unexpected '=' in "mtcars[mtcars$cyl ="
+> mtcars[-1:4, ]
+Error in xj[i] : only 0's may be mixed with negative subscripts
+> mtcars[mtcars$cyl <= 5]
+Error in `[.data.frame`(mtcars, mtcars$cyl <= 5) : 
+  undefined columns selected
+> mtcars[mtcars$cyl == 4 | 6, ]
+                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+> mtcars[mtcars$cyl == 4, ]
+                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Datsun 710     22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Merc 240D      24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230       22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona  21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+> mtcars[-c(1:4),]
+                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+> mtcars[mtcars$cyl <= 5,]
+                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Datsun 710     22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Merc 240D      24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230       22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona  21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+> mtcars[mtcars$cyl == 4 | mtcars$cyl == 6,]
+                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710     22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Merc 240D      24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230       22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Merc 280       19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C      17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+Toyota Corona  21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+>  x <- 1:5; x[NA]
+[1] NA NA NA NA NA
+> x[NA_real_]
+[1] NA
+> # ^ different because of recycling
+> x <- outer(1:5, 1:5, FUN = "*")
+> x[upper.tri(x)]
+ [1]  2  3  6  4  8 12  5 10 15 20
+> x
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    2    3    4    5
+[2,]    2    4    6    8   10
+[3,]    3    6    9   12   15
+[4,]    4    8   12   16   20
+[5,]    5   10   15   20   25
+> mtcars[1:20]
+Error in `[.data.frame`(mtcars, 1:20) : undefined columns selected
+> # ^ doesn't work because there are less than 20 columns
+> mtcars[1:20, ]
+                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+> diag(x)
+[1]  1  4  9 16 25
+> x[c(1,2,3,4,5), c(1,2,3,4,5)]
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    2    3    4    5
+[2,]    2    4    6    8   10
+[3,]    3    6    9   12   15
+[4,]    4    8   12   16   20
+[5,]    5   10   15   20   25
+> x[1, 1]
+[1] 1
+> x[2, 2]
+[1] 4
+> x[3, 3]
+[1] 9
+> x[4, 4]
+[1] 16
+> x[5, 5]
+[1] 25
+> c(x[1,1], x[2,2], x[3,3], x[4,4], x[5,5])
+[1]  1  4  9 16 25
+> c <- c()
+> for (i in 1:length(x)) {c <- append(c, x[i,i])}
+Error in x[i, i] : subscript out of bounds
+> length(x)
+[1] 25
+> length(x[,])
+[1] 25
+> length(x[1,])
+[1] 5
+> for (i in 1:length(x[,1])) {c <- append(c, x[i,i])}
+> c
+ [1]  1  4  9 16 25  1  4  9 16 25
+> c <- c()
+> for (i in 1:length(x[,1])) {c <- append(c, x[i,i])}
+> c
+[1]  1  4  9 16 25
+> x <- outer(1:10, 1:10, FUN = "*")
+> x
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]    1    2    3    4    5    6    7    8    9    10
+ [2,]    2    4    6    8   10   12   14   16   18    20
+ [3,]    3    6    9   12   15   18   21   24   27    30
+ [4,]    4    8   12   16   20   24   28   32   36    40
+ [5,]    5   10   15   20   25   30   35   40   45    50
+ [6,]    6   12   18   24   30   36   42   48   54    60
+ [7,]    7   14   21   28   35   42   49   56   63    70
+ [8,]    8   16   24   32   40   48   56   64   72    80
+ [9,]    9   18   27   36   45   54   63   72   81    90
+[10,]   10   20   30   40   50   60   70   80   90   100
+> for (i in 1:length(x[,1])) {c <- append(c, x[i,i])}
+> c
+ [1]   1   4   9  16  25   1   4   9  16  25  36  49  64  81 100
+> c <- c()
+> for (i in 1:length(x[,1])) {c <- append(c, x[i,i])}
+> c
+ [1]   1   4   9  16  25  36  49  64  81 100
+> diag
+function (x = 1, nrow, ncol) 
+{
+    if (is.matrix(x)) {
+        if (nargs() > 1L) 
+            stop("'nrow' or 'ncol' cannot be specified when 'x' is a matrix")
+        if ((m <- min(dim(x))) == 0L) 
+            return(vector(typeof(x), 0L))
+        y <- c(x)[1 + 0L:(m - 1L) * (dim(x)[1L] + 1)]
+        nms <- dimnames(x)
+        if (is.list(nms) && !any(sapply(nms, is.null)) && identical((nm <- nms[[1L]][seq_len(m)]), 
+            nms[[2L]][seq_len(m)])) 
+            names(y) <- nm
+        return(y)
+    }
+    if (is.array(x) && length(dim(x)) != 1L) 
+        stop("'x' is an array, but not one-dimensional.")
+    if (missing(x)) 
+        n <- nrow
+    else if (length(x) == 1L && nargs() == 1L) {
+        n <- as.integer(x)
+        x <- 1
+    }
+    else n <- length(x)
+    if (!missing(nrow)) 
+        n <- nrow
+    if (missing(ncol)) 
+        ncol <- n
+    .Internal(diag(x, n, ncol))
+}
+<bytecode: 0x7fea2de284d8>
+<environment: namespace:base>
+> y <- c(x)[1 + 0L:(m - 1L) * (dim(x)[1L] + 1)]
+Error: object 'm' not found
+> m <- min(dim(x))
+> y <- c(x)[1 + 0L:(m - 1L) * (dim(x)[1L] + 1)]
+> y
+ [1]   1   4   9  16  25  36  49  64  81 100
+> m
+[1] 10
+> c(x)
+  [1]   1   2   3   4   5   6   7   8   9  10   2   4   6   8  10  12  14  16
+ [19]  18  20   3   6   9  12  15  18  21  24  27  30   4   8  12  16  20  24
+ [37]  28  32  36  40   5  10  15  20  25  30  35  40  45  50   6  12  18  24
+ [55]  30  36  42  48  54  60   7  14  21  28  35  42  49  56  63  70   8  16
+ [73]  24  32  40  48  56  64  72  80   9  18  27  36  45  54  63  72  81  90
+ [91]  10  20  30  40  50  60  70  80  90 100
+> 1+0L:(m-1L)
+ [1]  1  2  3  4  5  6  7  8  9 10
+> dim(x)[1L] + 1
+[1] 11
+> 1+0L:(m-1L) * dim(x)[1L] + 1
+ [1]  2 12 22 32 42 52 62 72 82 92
+> df[is.na(df)] <- 0
+> df
+  x y z
+1 1 3 a
+2 2 2 b
+3 3 1 c
+> df[is.na(df)]
+character(0)
+> 0
+[1] 0
+> #“If list x is a train carrying objects, then x[[5]] is the object in car 5; x[4:6] is a train of cars 4-6.”
+> # [[ subsetting for returning just a single value
+> #x$y is equivalent to x[["y", exact = FALSE]]
+> var <- "cyl"
+> mtcars[[var]]
+ [1] 6 6 4 6 8 6 8 4 4 6 6 8 8 8 8 8 8 4 4 4 4 8 8 8 8 4 4 4 8 6 8 4
+> mtcars$var
+NULL
+> var
+[1] "cyl"
+> [[var]]
+Error: unexpected '[[' in "[["
+> # $ does partial matching, while [[]] does not
+> mod <- lm(mpg ~ wt, data = mtcars)
+> mod
+
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Coefficients:
+(Intercept)           wt  
+     37.285       -5.344  
+
+> summary(mod)
+
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  37.2851     1.8776  19.858  < 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
+
+> ms <- summary(mod)
+> ms
+
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  37.2851     1.8776  19.858  < 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
+
+> ms[1]
+$call
+lm(formula = mpg ~ wt, data = mtcars)
+
+> ms[2]
+$terms
+mpg ~ wt
+attr(,"variables")
+list(mpg, wt)
+attr(,"factors")
+    wt
+mpg  0
+wt   1
+attr(,"term.labels")
+[1] "wt"
+attr(,"order")
+[1] 1
+attr(,"intercept")
+[1] 1
+attr(,"response")
+[1] 1
+attr(,".Environment")
+<environment: R_GlobalEnv>
+attr(,"predvars")
+list(mpg, wt)
+attr(,"dataClasses")
+      mpg        wt 
+"numeric" "numeric" 
+
+> ms[3]
+$residuals
+          Mazda RX4       Mazda RX4 Wag          Datsun 710 
+         -2.2826106          -0.9197704          -2.0859521 
+     Hornet 4 Drive   Hornet Sportabout             Valiant 
+          1.2973499          -0.2001440          -0.6932545 
+         Duster 360           Merc 240D            Merc 230 
+         -3.9053627           4.1637381           2.3499593 
+           Merc 280           Merc 280C          Merc 450SE 
+          0.2998560          -1.1001440           0.8668731 
+         Merc 450SL         Merc 450SLC  Cadillac Fleetwood 
+         -0.0502472          -1.8830236           1.1733496 
+Lincoln Continental   Chrysler Imperial            Fiat 128 
+          2.1032876           5.9810744           6.8727113 
+        Honda Civic      Toyota Corolla       Toyota Corona 
+          1.7461954           6.4219792          -2.6110037 
+   Dodge Challenger         AMC Javelin          Camaro Z28 
+         -2.9725862          -3.7268663          -3.4623553 
+   Pontiac Firebird           Fiat X1-9       Porsche 914-2 
+          2.4643670           0.3564263           0.1520430 
+       Lotus Europa      Ford Pantera L        Ferrari Dino 
+          1.2010593          -4.5431513          -2.7809399 
+      Maserati Bora          Volvo 142E 
+         -3.2053627          -1.0274952 
+
+> ms[4]
+$coefficients
+             Estimate Std. Error   t value     Pr(>|t|)
+(Intercept) 37.285126   1.877627 19.857575 8.241799e-19
+wt          -5.344472   0.559101 -9.559044 1.293959e-10
+
+> ms[5]
+$aliased
+(Intercept)          wt 
+      FALSE       FALSE 
+
+> ms[6]
+$sigma
+[1] 3.045882
+
+> ms[7]
+$df
+[1]  2 30  2
+
+> ms[8]
+$r.squared
+[1] 0.7528328
+
+> ms$r.squared
+[1] 0.7528328
+> ms[[r.squared]]
+Error: object 'r.squared' not found
+> ms[['r.squared']]
+[1] 0.7528328
+> #df[is.na(df)] <- 0 assigns all NA values to 0 instead
+> df
+  x y z
+1 1 3 a
+2 2 2 b
+3 3 1 c
+> df[1,1] <- NA
+> df
+   x y z
+1 NA 3 a
+2  2 2 b
+3  3 1 c
+> df[is.na(df)] <- 0
+> df
+  x y z
+1 0 3 a
+2 2 2 b
+3 3 1 c
+> ?unname
+starting httpd help server ... done
+> grades <- c(1, 2, 2, 3, 1)
+> info <- data.frame(
++   grade = 3:1,
++   desc = c("A", "B", "C"),
++   fail = c(F, F, T)
++ )
+> grades
+[1] 1 2 2 3 1
+> infor
+Error: object 'infor' not found
+> info
+  grade desc  fail
+1     3    A FALSE
+2     2    B FALSE
+3     1    C  TRUE
+> id <- match(grades, info$grade)
+> id
+[1] 3 2 2 1 3
+> info[id, ]
+    grade desc  fail
+3       1    C  TRUE
+2       2    B FALSE
+2.1     2    B FALSE
+1       3    A FALSE
+3.1     1    C  TRUE
+> info[1]
+  grade
+1     3
+2     2
+3     1
+> info[1:3]
+  grade desc  fail
+1     3    A FALSE
+2     2    B FALSE
+3     1    C  TRUE
+> info[1,]
+  grade desc  fail
+1     3    A FALSE
+> info[1:3,]
+  grade desc  fail
+1     3    A FALSE
+2     2    B FALSE
+3     1    C  TRUE
+> info[c(3,2,2,1,3),]
+    grade desc  fail
+3       1    C  TRUE
+2       2    B FALSE
+2.1     2    B FALSE
+1       3    A FALSE
+3.1     1    C  TRUE
+> info[c(2,2,2,2,2),]
+    grade desc  fail
+2       2    B FALSE
+2.1     2    B FALSE
+2.2     2    B FALSE
+2.3     2    B FALSE
+2.4     2    B FALSE
+> df2 <- data.frame(x = rep(1:3, each = 2), y = 6:1, z = letters[1:6])
+> df2
+  x y z
+1 1 6 a
+2 1 5 b
+3 2 4 c
+4 2 3 d
+5 3 2 e
+6 3 1 f
+> set.seed(10)
+> df[sample(nrow(df)), ]
+  x y z
+2 2 2 b
+1 0 3 a
+3 3 1 c
+> df2[sample(nrow(df2)), ]
+  x y z
+5 3 2 e
+1 1 6 a
+6 3 1 f
+4 2 3 d
+3 2 4 c
+2 1 5 b
+> nrow
+function (x) 
+dim(x)[1L]
+<bytecode: 0x7fea2caa4878>
+<environment: namespace:base>
+> dim(df2)
+[1] 6 3
+> dim(df2)[1]
+[1] 6
+> x <- c("b", "c", "a")
+> x
+[1] "b" "c" "a"
+> order(x)
+[1] 3 1 2
+> x[order(x)]
+[1] "a" "b" "c"
+> #vector boolean operators (& and |) vs short-circuiting scalar operators (&& and ||)
+> x <- sample(10) < 4
+> which(x)
+[1] 4 6 9
+> x
+ [1] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE
+> (x1 <- 1:10 %% 2 == 0)
+ [1] FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+> x1
+ [1] FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+> (y1 <- 1:10 %% 5 == 0)
+ [1] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE
+> x1[y1]
+[1] FALSE  TRUE
+> which(x1[y1])
+[1] 2
+> x1[which(y1)]
+[1] FALSE  TRUE
+> df
+  x y z
+1 0 3 a
+2 2 2 b
+3 3 1 c
+> df[sample(nrow(df)), ]
+  x y z
+3 3 1 c
+2 2 2 b
+1 0 3 a
+> df[,sample(ncol(df))]
+  z x y
+1 a 0 3
+2 b 2 2
+3 c 3 1
+> df[sample(nrow(df)),sample(ncol(df))]
+  z y x
+3 c 1 3
+1 a 3 0
+2 b 2 2
+> df[sample(nrow(df), 3),sample(ncol(df))]
+  x z y
+2 2 b 2
+3 3 c 1
+1 0 a 3
+> df[sample(nrow(df), 2),sample(ncol(df))]
+  z y x
+1 a 3 0
+3 c 1 3
+> df[sample(nrow(df), 1),sample(ncol(df))]
+  x y z
+1 0 3 a
+> df[sample(nrow(df), 1:2),sample(ncol(df))]
+  x z y
+3 3 c 1
+> df[order(df)]
+Error in `[.data.frame`(df, order(df)) : undefined columns selected
+> df[order()]
+data frame with 0 columns and 3 rows
+> order(df)
+[1] 1 6 2 5 3 4 7 8 9
+> sort(df)
+Error in `[.data.frame`(x, order(x, na.last = na.last, decreasing = decreasing)) : 
+  undefined columns selected
+> df[order(df),]
+      x  y    z
+1     0  3    a
+NA   NA NA <NA>
+2     2  2    b
+NA.1 NA NA <NA>
+3     3  1    c
+NA.2 NA NA <NA>
+NA.3 NA NA <NA>
+NA.4 NA NA <NA>
+NA.5 NA NA <NA>
+> df_rand <- df[sample(nrow(df)),sample(ncol(df))]
+> df_rand
+  y z x
+2 2 b 2
+1 3 a 0
+3 1 c 3
+> df_rand[order(df_rand),]
+      y    z  x
+NA   NA <NA> NA
+3     1    c  3
+2     2    b  2
+NA.1 NA <NA> NA
+1     3    a  0
+NA.2 NA <NA> NA
+NA.3 NA <NA> NA
+NA.4 NA <NA> NA
+NA.5 NA <NA> NA
+> df_rand[,order(df_rand)]
+Error in `[.data.frame`(df_rand, , order(df_rand)) : 
+  undefined columns selected
+> df_rand[order(df_rand$x),]
+  y z x
+1 3 a 0
+2 2 b 2
+3 1 c 3
+> df_rand[order(df_rand$y),]
+  y z x
+3 1 c 3
+2 2 b 2
+1 3 a 0
+> df_rand[order(df_rand$z),]
+  y z x
+1 3 a 0
+2 2 b 2
+3 1 c 3
+> #Positive integers select elements at specific positions, negative integers drop elements; logical vectors keep elements at positions corresponding to TRUE; character vectors select elements with matching names.
+> 
+> #[ selects sub-lists. It always returns a list; if you use it with a single positive integer, it returns a list of length one. [[ selects an element within a list. $ is a convenient shorthand: x$y is equivalent to x[["y"]].
+> 
+> #Use drop = FALSE if you are subsetting a matrix, array, or data frame and you want to preserve the original dimensions. You should almost always use it when subsetting inside a function.
+> 
+> #If x is a matrix, x[] <- 0 will replace every element with 0, keeping the same number of rows and columns. x <- 0 completely replaces the matrix with the value 0.
+> 
+> #A named character vector can act as a simple lookup table: c(x = 1, y = 2, z = 3)[c("y", "z", "x")]
+> 
+> #http://adv-r.had.co.nz/Subsetting.html
+> 
