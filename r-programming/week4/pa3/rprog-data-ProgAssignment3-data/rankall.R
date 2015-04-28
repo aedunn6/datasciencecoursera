@@ -2,7 +2,6 @@ rankall <- function(outcome, num = "best") {
   ## Read outcome data
   outcome_data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
 
-
   ## Check that state and outcome are valid
   states <- sort(unique(outcome_data[,7]))
   if (!is.element(state, states))
@@ -20,12 +19,12 @@ rankall <- function(outcome, num = "best") {
   else if (outcome == "pneumonia")
     col = 23
 
-  outcome_data[,col] <- as.numeric(outcome_data[,col])
+  #outcome_data[,col] <- as.numeric(outcome_data[,col])
 
   state_ranks <- data.frame()
 
   for (state in states) {
-    state_rank <- data.frame(state, rankstate(outcome_data, state, col, num))
+    state_rank <- data.frame(rankstate(outcome_data, state, col, num), state)
     state_ranks <- rbind(state_ranks, state_rank)
   }
 
