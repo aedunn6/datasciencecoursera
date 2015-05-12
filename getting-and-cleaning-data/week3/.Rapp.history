@@ -1,0 +1,272 @@
+x <- outer(1:10, 1:10, FUN = "*")
+x
+for (i in 1:length(x[,1])) {c <- append(c, x[i,i])}
+c
+c <- c()
+for (i in 1:length(x[,1])) {c <- append(c, x[i,i])}
+c
+diag
+y <- c(x)[1 + 0L:(m - 1L) * (dim(x)[1L] + 1)]
+m <- min(dim(x))
+y <- c(x)[1 + 0L:(m - 1L) * (dim(x)[1L] + 1)]
+y
+m
+c(x)
+1+0L:(m-1L)
+dim(x)[1L] + 1
+1+0L:(m-1L) * dim(x)[1L] + 1
+df[is.na(df)] <- 0
+df
+df[is.na(df)]
+0
+#“If list x is a train carrying objects, then x[[5]] is the object in car 5; x[4:6] is a train of cars 4-6.”
+# [[ subsetting for returning just a single value
+#x$y is equivalent to x[["y", exact = FALSE]]
+var <- "cyl"
+mtcars[[var]]
+mtcars$var
+var
+[[var]]
+# $ does partial matching, while [[]] does not
+mod <- lm(mpg ~ wt, data = mtcars)
+mod
+summary(mod)
+ms <- summary(mod)
+ms
+ms[1]
+ms[2]
+ms[3]
+ms[4]
+ms[5]
+ms[6]
+ms[7]
+ms[8]
+ms$r.squared
+ms[[r.squared]]
+ms[['r.squared']]
+#df[is.na(df)] <- 0 assigns all NA values to 0 instead
+df
+df[1,1] <- NA
+df
+df[is.na(df)] <- 0
+df
+?unname
+grades <- c(1, 2, 2, 3, 1)
+info <- data.frame(#
+  grade = 3:1,#
+  desc = c("A", "B", "C"),#
+  fail = c(F, F, T)#
+)
+grades
+infor
+info
+id <- match(grades, info$grade)
+id
+info[id, ]
+info[1]
+info[1:3]
+info[1,]
+info[1:3,]
+info[c(3,2,2,1,3),]
+info[c(2,2,2,2,2),]
+df2 <- data.frame(x = rep(1:3, each = 2), y = 6:1, z = letters[1:6])
+df2
+set.seed(10)
+df[sample(nrow(df)), ]
+df2[sample(nrow(df2)), ]
+nrow
+dim(df2)
+dim(df2)[1]
+x <- c("b", "c", "a")
+x
+order(x)
+x[order(x)]
+#vector boolean operators (& and |) vs short-circuiting scalar operators (&& and ||)
+x <- sample(10) < 4
+which(x)
+x
+(x1 <- 1:10 %% 2 == 0)
+x1
+(y1 <- 1:10 %% 5 == 0)
+x1[y1]
+which(x1[y1])
+x1[which(y1)]
+df
+df[sample(nrow(df)), ]
+df[,sample(ncol(df))]
+df[sample(nrow(df)),sample(ncol(df))]
+df[sample(nrow(df), 3),sample(ncol(df))]
+df[sample(nrow(df), 2),sample(ncol(df))]
+df[sample(nrow(df), 1),sample(ncol(df))]
+df[sample(nrow(df), 1:2),sample(ncol(df))]
+df[order(df)]
+df[order()]
+order(df)
+sort(df)
+df[order(df),]
+df_rand <- df[sample(nrow(df)),sample(ncol(df))]
+df_rand
+df_rand[order(df_rand),]
+df_rand[,order(df_rand)]
+df_rand[order(df_rand$x),]
+df_rand[order(df_rand$y),]
+df_rand[order(df_rand$z),]
+#Positive integers select elements at specific positions, negative integers drop elements; logical vectors keep elements at positions corresponding to TRUE; character vectors select elements with matching names.#
+#
+#[ selects sub-lists. It always returns a list; if you use it with a single positive integer, it returns a list of length one. [[ selects an element within a list. $ is a convenient shorthand: x$y is equivalent to x[["y"]].#
+#
+#Use drop = FALSE if you are subsetting a matrix, array, or data frame and you want to preserve the original dimensions. You should almost always use it when subsetting inside a function.#
+#
+#If x is a matrix, x[] <- 0 will replace every element with 0, keeping the same number of rows and columns. x <- 0 completely replaces the matrix with the value 0.#
+#
+#A named character vector can act as a simple lookup table: c(x = 1, y = 2, z = 3)[c("y", "z", "x")]
+#http://adv-r.had.co.nz/Subsetting.html
+#str (structure): compactly display internal structure of an R object
+#rnorm: random normals
+#generating random variables: rnorm, dnorm, pnorm, rpois
+#set the seed for reproducibility
+#system.time(<function>): gives time taken to run function
+#user time can be greater than elapsed time because of parallelization
+#rprof(): r profiler
+#summaryRprof(): summarizes output from rprof() function
+#by.total: divides time spent in each function by total runtime
+#by.self: does same, but subtracts out time spent in functions above in the call stack
+# ^ used to find bottlenecks in your code
+set.seed(1)#
+rpois(5, 2)
+rnorm
+?rnorm
+?rpois
+set.seed(10)#
+x <- rep(0:1, each = 5)#
+e <- rnorm(10, 0, 20)#
+y <- 0.5 + 2 * x + e
+x
+e
+y
+?qbinom
+library(datasets)#
+Rprof()#
+fit <- lm(y ~ x1 + x2)#
+Rprof(NULL)
+summaryRprof()
+Rprof(fit)
+fit
+x1 <- 3
+x2 <- 4
+library(datasets)#
+Rprof()#
+fit <- lm(y ~ x1 + x2)#
+Rprof(NULL)
+fit
+#Standard probability distributions in R have a set of four functions that can be used to simulate variates, evaluate the density, evaluate the cumulative density, and evaluate the quantile function.
+#Functions beginning with the `r' prefix are used to simulate random variates.
+#Functions beginning with the `q' prefix are used to evaluate the quantile (inverse cumulative distribution) function.
+head(iris)
+x1 <- xtabs(Sepal.Length ~ Species + Sepal.Width,data=iris)
+head(x1)
+hx1
+x1
+#tidy data:
+# - each variable forms a column
+# - each observation forms a row
+# - each table/file stores data about one kind of observation
+# plyr and dplyr packages
+install.packages("plyr")
+install.packages("dplyr")
+setwd("/Users/ashleyelizabeth/Development/datasciencecoursera/getting-and-cleaning-data/week3")
+download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv", "hid.csv", "curl")
+hid <- read.csv("hid.csv")
+head(hid)
+agricultureLogical <- hid[hid$ACR == 3 && hid$AGS == 6,]
+head(agricultureLogical)
+head(hid[hid$ACR == 3,])
+head(complete.cases(hid))
+head(hid[complete.cases(hid),])
+head(hid[complete.cases(hid$ACR),])
+agricultureLogical <- hid[complete.cases(hid$ACR == 3) && complete.cases(hid$AGS == 6),]
+head(agricultureLogical)
+agricultureLogical <- hid[hid$ACR == 3 && hid$AGS == 6,]
+which(agricultureLogical)
+head(hid[hid$ACR == 3])
+head(hid[hid$ACR == 3,])
+head(complete.cases(hid[hid$ACR == 3,]))
+head(hid[complete.cases(hid$ACR == 3),])
+head(hid[complete.cases(hid$AGR == 6),])
+head(na.omit(hid))
+agricultureLogical <- hid$ACR == 3 && hid$AGS == 6
+head(agricultureLogical)
+which(agricultureLogical)
+agricultureLogical <- hid$ACR == 3
+head(agricultureLogical)
+agricultureLogical <- hid$AGS == 6
+head(agricultureLogical)
+which(agricultureLogical)
+agricultureLogical <- hid$ACR == 3
+which(agricultureLogical)
+agricultureLogical <- hid$ACR == 3 && hid$AGS == 6
+which(agricultureLogical)
+agricultureLogical1 <- hid$ACR == 3
+agricultureLogical2 <- hid$AGS == 6
+which(agricultureLogical1)
+which(agricultureLogical2)
+agricultureLogical <- which(agricultureLogical1) && which(agricultureLogical2)
+agricultureLogical
+which(agricultureLogical)
+library(jpeg)
+install.packages("jpeg")
+library(jpeg)
+download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fjeff.jpg", "jeff.jpg", "curl")
+readJPEG("jeff.jpg")
+jeff <- readJPEG("jeff.jpg")
+quantile(jeff,probs=c(.3,.8),native=TRUE)
+quantile(jeff,probs=c(.3,.8)/100,native=TRUE)
+quantile(jeff,native=TRUE)
+quantile(jeff,probs=c(.3,.8)*100,native=TRUE)
+quantile(jeff,probs=c(.3,.8),native=TRUE)*100
+readJPEG("jeff.jpg",native=TRUE)
+jeff <- readJPEG("jeff.jpg",native=TRUE)
+quantile(jeff,probs=c(.3,.8),native=TRUE)*100
+download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv")
+download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv","gdp.csv","curl")
+download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv ","country.csv","curl")
+library(dplyr)
+library(plyr)
+library(plyr)
+library(dplyr)
+gdp <- read.csv("gdp.csv")
+country <- read.csv("country.csv")
+names(gdp)
+names(country)
+head(gdp)
+head(country)
+merge(gdp,country,by.x=X,by.y=CountryCode)
+merge(gdp,country,by.x="X",by.y="CountryCode")
+merged <- merge(gdp,country,by.x="X",by.y="CountryCode")
+arrange(merged,desc("Gross.domestic.product.2012"))
+names(merged)
+head(merged$X)
+head(merged[c(merged$X, merged$Short.Name),],13)
+merged <- merge(gdp,country,by.x="X",by.y="CountryCode",all=TRUE)
+head(merged)
+head(merged$X)
+unique(merged$X)
+merged_sorted <- merged[with(merged, order(-X)), ]
+merged_sorted <- merged[with(merged, order(X)), ]
+head(merged_sorted)
+head(merged_sorted$X)
+names(merged)
+merged_sorted <- merged[with(merged, order(Gross.domestic.product.2012)), ]
+head(merged_sorted$X)
+head(merged_sorted$Gross.domestic.product.2012)
+tail(merged_sorted$Gross.domestic.product.2012)
+merged_sorted$Gross.domestic.product.2012
+str(merged)
+as.numeric(levels(Gross.domestic.product.2012))[Gross.domestic.product.2012]
+as.numeric(levels(merged))[merged]
+as.numeric(levels(merged$Gross.domestic.product.2012))[merged$Gross.domestic.product.2012]
+merged_sorted <- merged[with(merged, order(Gross.domestic.product.2012)), ]
+tail(merged_sorted$Gross.domestic.product.2012)
+str(merged$Gross.domestic.product.2012)
+merged[merged$Gross.domestic.product.2012] <- as.numeric(levels(merged$Gross.domestic.product.2012))[merged$Gross.domestic.product.2012]
+names(gdp)

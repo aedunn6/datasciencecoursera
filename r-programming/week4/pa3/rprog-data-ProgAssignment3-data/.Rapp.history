@@ -1,0 +1,250 @@
+heart_attack_mortality[heart_attack_mortality$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack == min(heart_attack_mortality[2]),]
+heart_attack_mortality[heart_attack_mortality$11 == min(heart_attack_mortality[2]),]
+heart_attack_mortality[heart_attack_mortality[11] == min(heart_attack_mortality[2]),]
+colnames(outcome)[11]
+heart_attack_mortality[heart_attack_mortality$colnames(outcome)[11] == min(heart_attack_mortality[2]),]
+heart_attack_mortality[11]
+heart_attack_mortality[heart_attack_mortality[2] == min(heart_attack_mortality[2]),]
+best <- heart_attack_mortality[heart_attack_mortality[2] == min(heart_attack_mortality[2]),]
+length(best)
+length(best[1])
+heart_failure_mortality <- na.omit(outcome[, c(2,17)])
+best_hosps <- heart_failure_mortality[heart_failure_mortality $2 == min([2]),]heart_failure_mortality
+best_hosps <- heart_failure_mortality[heart_failure_mortality$2 == min([2]),]heart_failure_mortality
+heart_failure_mortality
+head(heart_failure_mortality)
+min(heart_failure_mortality[2])
+heart_failure_mortality  <- as.numeric(heart_failure_mortality)
+heart_failure_mortality <- na.omit(heart_failure_mortality(outcome[, c(2,17)]))
+heart_failure_mortality <- na.omit(as.numeric(outcome[, c(2,17)]))
+heart_failure_mortality <- heart_failure_mortality[, heart_failure_mortality$2 != "Not Available"]
+heart_failure_mortality$2
+heart_failure_mortality
+length(heart_failure_mortality)
+length(heart_failure_mortality[2])
+heart_failure_mortality <- heart_failure_mortality[, heart_failure_mortality[2] != "Not Available"]
+heart_failure_mortality[2]
+heart_failure_mortality$2
+heart_failure_mortality$1
+head(sort(heart_failure_mortality[1]))
+head(sort(heart_attack_mortality[1]))
+sort(best)
+sort(best[1])
+source("best.R")
+source("best.R")
+best_hosp <- heart_attack_mortality[heart_attack_mortality$2]
+source("best.R")
+source("best.R")
+best("TX", "heart attack")
+best("TX", "heart failure")
+best("MD", "heart attack")
+best("MD", "pneumonia")
+best("BB", "heart attack")
+best("NY", "hert attack")
+outcome <- "heart attack"
+if (!is.element(outcome, c("heart attack", "heart failure", "pneumonia")))
+stop("invalid outcome")
+source("best.R")
+best("TX", "heart attack")
+best("TX", "heart failure")
+best("MD", "heart attack")
+best("MD", "pneumonia")
+best("BB", "heart attack")
+best("NY", "hert attack")
+source("best.R")
+best("TX", "heart attack")
+outcome_data <- read.csv("outcome-of-care-measures.csv")
+col <- 11
+mort <- na.omit(outcome_data[, c(2, col)])
+best_hosps <- mort[mort[2] == min(mort[2]),][1]
+head(mort)
+min(mort[2])
+mort <- mort[,mort[2] != "Not Available"]
+mort[mort[2] != "Not Available",]
+mort <- mort[mort[2] != "Not Available",]
+min(mort[2])
+best_hosps <- mort[mort[2] == min(mort[2]),][1]
+mort <- as.numeric(mort[mort[2] != "Not Available",])
+#outcome[, 11] <- as.numeric(outcome[, 11])
+source("best.R")
+best("TX", "heart attack")
+summary(mort)
+source("best.R")
+best("TX", "heart attack")
+source("best.R")
+best("TX", "heart attack")
+best("TX", "heart failure")
+source("best.R")
+best("TX", "heart failure")
+head(mort)
+min(mort[2])
+outcome_data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+head(outcome_data)
+summary(outcome_data)
+str(outcome_data)
+mort <- na.omit(outcome_data[, c(2, col)])
+head(mort)
+outcome_data[,11] <- as.numeric(outcome_data[,11])
+mort <- na.omit(outcome_data[, c(2, col)])
+head(mort)
+mort[mort[2] == min(mort[2]),][1]
+sort(best_hosps)[1]
+best_hosps <- mort[mort[2] == min(mort[2]),][1]
+sort(best_hosps)[1]
+as.vector(sort(best_hosps)[1])
+as.vector(sort(best_hosps)[1][1])
+as.vector(sort(best_hosps)[1][1][1])
+sort(best_hosps)[1][1]
+sort(best_hosps)[1][1][1]
+source("best.R")
+best("TX", "heart attack")
+source("best.R")
+best("TX", "heart attack")
+head(mort)
+head(mort[mort[1] == state])
+state <- 'TX'
+head(mort[mort[1] == state])
+source("best.R")
+best("TX", "heart attack")
+head(mort)
+source("best.R")
+head(mort)
+best("TX", "heart attack")
+head(mort)
+outcome_data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+outcome_data[,col] <- as.numeric(outcome_data[,col])
+mort <- na.omit(outcome_data[, c(2, 7, col)])
+head(mort)
+head(mort[mort[2] == state])
+head(mort[mort[2] == state & mort[3] == min(mort[3])])
+source("best.R")
+source("best.R")
+best("TX", "heart attack")
+head(state_mort)
+outcome_data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+outcome_data[,col] <- as.numeric(outcome_data[,col])
+mort <- na.omit(outcome_data[, c(2, 7, col)])
+head(mort)
+state_mort <- mort[mort[2] == state]
+head(state_mort)
+state_mort <- mort[,mort[2] == state]
+state_mort <- mort[mort[2] == state,]
+head(state_mort)
+source("best.R")
+best("TX", "heart attack")
+best("TX", "heart failure")
+best("MD", "heart attack")
+best("MD", "pneumonia")
+best("BB", "heart attack")
+best("NY", "hert attack")
+source("best.R")
+best("TX", "heart attack")
+best("TX", "heart failure")
+best("MD", "heart attack")
+best("MD", "pneumonia")
+source("http://d396qusza40orc.cloudfront.net/rprog%2Fscripts%2Fsubmitscript3.R")
+submit()
+submit()
+submit()
+outcome_data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+outcome_data[,col] <- as.numeric(outcome_data[,col])
+mort <- na.omit(outcome_data[, c(2, 7, col)])
+head(mort)
+names(mort) <- c("Hospital.Name", "State", "Rate")
+head(mort)
+?order
+order(mort[3], mort[1])
+head(order(mort[3], mort[1]))
+head(mort)
+head(mort[order(mort[3], mort[1])])
+mort[ order(mort[,3], mort[,1]), ]
+head(mort[ order(mort[,3], mort[,1]), ])
+head(mort[ order(mort[,3], mort[,1]), ])[1]
+mort[ order(mort[,3], mort[,1]), ][1]
+head(mort[ order(mort[,3], mort[,1]), ])[1,]
+head(mort[ order(mort[,3], mort[,1]), ])[,1]
+head(mort[ order(mort[,3], mort[,1]), ])[1,]
+length(mort[ order(mort[,3], mort[,1]), ])
+length(mort[ order(mort[,3], mort[,1]), ][1])
+ranked <- mort[ order(mort[,3], mort[,1]), ]
+head(ranked)
+length(ranked[3])
+length(ranked[3,])
+length(ranked[,3])
+ranked[2720,]
+ranked[2721,]
+source("rankedhospital.R")
+source("rankhospital.R")
+source("rankhospital.R")
+rankhospital("TX", "heart failure", 4)
+rankhospital("MD", "heart attack", "worst")
+rankhospital("MN", "heart attack", 5000)
+ranked[2721,]
+ranked[2720,]
+ranked[2720,][1]
+ranked[2720,][1,]
+ranked[2720,][,1]
+source("rankhospital.R")
+rankhospital("TX", "heart failure", 4)
+rankhospital("MD", "heart attack", "worst")
+rankhospital("MN", "heart attack", 5000)
+submit()
+submit()
+submit()
+submit()
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+states = c('AK','GA','UT','FL')
+state_ranks <- data.frame()
+for (state in states) {
+state_ranks.rbind(state_ranks, data.frame(state, 1))
+}
+for (state in states) {
+state_ranks <- rbind(state_ranks, data.frame(state, 1))
+}
+state_ranks
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+?data.frame
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+data.frame("ARKANSAS METHODIST MEDICAL CENTER", 'AR')
+AR <- data.frame("ARKANSAS METHODIST MEDICAL CENTER", 'AR')
+AR
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+tail(rankall("pneumonia", "worst"), 3)
+tail(rankall("heart failure"), 10)
+submit()
+submit()
+submit()
+head(state_ranks)
+tail(rankall("pneumonia", "worst"), 3)
+head(state_ranks)
+worst <- rankall("pneumonia", "worst")
+class(worst)
+unclass(worst)
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+tail(rankall("pneumonia", "worst"), 3)
+tail(rankall("heart failure"), 10)
+submit()
+submit()
+submit()
+rankhospital('WI', 'pneumonia', 'worst')
+rankhospital('WV', 'pneumonia', 'worst')
+rankhospital('WY', 'pneumonia', 'worst')
+source("rankall.R")
+head(rankall("heart attack", 20), 10)
+tail(rankall("pneumonia", "worst"), 3)
+tail(rankall("heart failure"), 10)
+submit()
+submit()
